@@ -38,7 +38,7 @@ func memberUpdate(s *discordgo.Session, member *discordgo.GuildMemberUpdate) {
 				fmt.Printf("Failed to get the guild %s (GuildID) the error is: %s\n", member.GuildID, err.Error())
 				return
 			}
-			privChannel, err := s.UserChannelCreate("751963179793383465" /*guild.OwnerID*/)
+			privChannel, err := s.UserChannelCreate(guild.OwnerID)
 			if err != nil {
 				fmt.Printf("Failed to create a DM for the owner <@!%s> of %s the error is: %s\n", guild.OwnerID, guild.Name, err.Error())
 				return
