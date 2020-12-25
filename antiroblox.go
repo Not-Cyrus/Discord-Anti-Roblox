@@ -25,17 +25,12 @@ func main() {
 	s.Close()
 }
 
-func memberUpdate(s *discordgo.Session, member *discordgo.GuildMemberUpdate) {
-	presence, err := s.State.Presence(member.GuildID, member.User.ID)
-	if err != nil {
-		fmt.Printf("Failed to get the presence of <@!%s> the error is: %s\n", member.User.ID, err.Error())
-		return
-	}
+func memberUpdate(s *discordgo.Session, presence *discordgo.PresenceUpdate) {
 	for _, game := range presence.Activities {
 		if game.Name == "ROBLOX" {
-			guild, err := s.Guild(member.GuildID)
+			guild, err := s.Guild(presence.GuildID)
 			if err != nil {
-				fmt.Printf("Failed to get the guild %s (GuildID) the error is: %s\n", member.GuildID, err.Error())
+				fmt.Printf("Failed to get the guild %s (GuildID) the error is: %s\n", presence.GuildID, err.Error())
 				return
 			}
 			privChannel, err := s.UserChannelCreate(guild.OwnerID)
@@ -43,7 +38,7 @@ func memberUpdate(s *discordgo.Session, member *discordgo.GuildMemberUpdate) {
 				fmt.Printf("Failed to create a DM for the owner <@!%s> of %s the error is: %s\n", guild.OwnerID, guild.Name, err.Error())
 				return
 			}
-			s.ChannelMessageSend(privChannel.ID, fmt.Sprintf("Found someone playing ROBLOX <@!%s> in your guild %s", member.User.ID, guild.Name))
+			s.ChannelMessageSend(privChannel.ID, fmt.Sprintf("Found someone playing ROBLOX <@!%s> in your guild %s", presence.User.ID, guild.Name))
 		}
 	}
 }
